@@ -1,344 +1,564 @@
+<!--
+  Dahua tool v 0.6
+  - Added Template interface
+  - Added modal to select between diferent recorder interfaces  
+  - Fixed bugs and fixed appearance issues
+  - Added more templates
+  + Lots of repeated code, not the best standards and little MVC separation. Works somehow. Sorry future me.
+  Dahua tool v 0.5
+  - Added troubleshooting box
+  - Changed layout based on team's feedback
+  - Added groundwork for templates
+  - Missing selector for templates now
+  - Issue with the onclick event for the agent dropdown  
+-->
 <!doctype html>
 <html lang="en">
 
 <head>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS"
-	 crossorigin="anonymous">
-	<style>
-		body,
-		html,
-		main,
-		form {
-			height: 100%;
-			font-size: 0.9em;
-		}
-
-    body {
-      overflow-y:hidden;
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
+    integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+  <style>
+    body,
+    html,
+    main,
+    form,
+    #mainrow {
+      height: 100%;
+      font-size: 0.9em;
     }
 
-		main {
-      padding:0px;
-			padding-top: 5em;
-		}
+    body {
+      overflow-y: hidden;
+    }
 
-		#textarea {
-			padding: 0px;
-		}
+    main {
+      padding: 0px;
+      padding-top: 5em;
+    }
 
-		.form-control,
-		.form-group,
+    #textarea {
+      padding: 0px;
+      margin: 0px;      
+    }
+
+    #workarea {
+      /* height: 65%; */
+      margin: 0px;
+      padding: 0px;
+      overflow-y: scroll;
+    }
+
+    .form-control,
+    .form-group,
     .form-group row {
-			padding: 1px;
-			margin: 0px;
-		}
+      padding: 1px;
+      margin: 0px;
+    }
+    /* Too many items will not fit on the screen, reduced padding to make them fit */
+    .dropdown-item {
+      padding-top:2px;
+    }
 
-		#mainText {
-			font-family: "Consolas", monospace;
-			background-color: #EFF;
-		}
-    .navbar-light, .navbar-light a, navbar-brand {
+    #mainText {
+      font-family: "Consolas", monospace;
+      background-color: #EFF;
+    }
+
+    .navbar-light,
+    .navbar-light a,
+    navbar-brand {
       background-color: #FFF;
       color: #A90329 !important;
     }
 
-	</style>
-	<title>Dahua Tool</title>
+    @media (max-width: 575.98px) {
+      
+      #workarea { height: 65%; }
+
+      #textarea { height: 35%; }
+
+      /* #selectWhere, #selectWhere2{
+        width: 45%;
+      } */
+    }
+  </style>
+  <title>Dahua Tool</title>
 </head>
 
 <body onload="reset()">
-	<nav class="navbar navbar-expand navbar-light fixed-top">
-		<a class="navbar-brand" href="#"><img src="https://us.dahuasecurity.com/wp-content/uploads/2017/08/Dahua-LOGO_black_with_red_D.png" style="height:35px; margin:0"></a>
-
-    
+  <nav class="navbar navbar-expand navbar-light fixed-top">
+    <a class="navbar-brand" href="#"><img
+        src="https://us.dahuasecurity.com/wp-content/uploads/2017/08/Dahua-LOGO_black_with_red_D.png"
+        style="height:35px; margin:0"></a>
     <div>
       <ul class="navbar-nav mr-auto">
         <li class="nav-item active">
-          <a class="nav-link" href="#" onclick="reset()">Reset <span class="sr-only">(current)</span></a>
+          <a class="nav-link" href="#" data-toggle="modal" data-target="#resetModal">Reset <span class="sr-only">(current)</span></a>
         </li>
         <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="dropdownWizard" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Your Name</a>
+          <a class="nav-link dropdown-toggle" href="#" id="dropdownWizard" data-toggle="dropdown" aria-haspopup="true"
+            aria-expanded="false">Your Name</a>
           <div class="dropdown-menu" aria-labelledby="dropdown01" id="dropdownNameList">
-            <a class="dropdown-item "href="#">Alejandro G</a>
-            <a class="dropdown-item "href="#">Angelica R</a>
-            <a class="dropdown-item "href="#">Armando A</a>
-            <a class="dropdown-item "href="#">Camila R</a>
-            <a class="dropdown-item "href="#">Daniel C</a>
-            <a class="dropdown-item "href="#">David Y</a>
-            <a class="dropdown-item "href="#">Diego S</a>
-            <a class="dropdown-item "href="#">Harold C</a>
-            <a class="dropdown-item "href="#">Jhon R</a>
-            <a class="dropdown-item "href="#">Juan S</a>
-            <a class="dropdown-item "href="#">Luis P</a>
-            <a class="dropdown-item "href="#">Mad P</a>
-            <a class="dropdown-item "href="#">Manuel H</a>
-            <a class="dropdown-item "href="#">Maria E</a>
-            <a class="dropdown-item "href="#">Miguel P</a>
-            <a class="dropdown-item "href="#">Santiago S</a>
-            <a class="dropdown-item "href="#">Sebastian B</a>
-            <a class="dropdown-item "href="#">Sebastian L</a>
-            <a class="dropdown-item "href="#">Sonia M</a>
-            <a class="dropdown-item "href="#">William S</a>
+            <a class="dropdown-item" href="#">Your Name Here</a>
+            <a class="dropdown-item" href="#" onClick="setCookie(this)">Alejandro P</a>
+            <a class="dropdown-item" href="#" onClick="setCookie(this)">Alex B</a>
+            <a class="dropdown-item" href="#" onClick="setCookie(this)">Armando A</a>
+            <a class="dropdown-item" href="#" onClick="setCookie(this)">Camila R</a>
+            <a class="dropdown-item" href="#" onClick="setCookie(this)">Daniel C</a>
+            <a class="dropdown-item" href="#" onClick="setCookie(this)">David Y</a>
+            <a class="dropdown-item" href="#" onClick="setCookie(this)">Dayan P</a>
+            <a class="dropdown-item" href="#" onClick="setCookie(this)">Giraldo A</a>
+            <a class="dropdown-item" href="#" onClick="setCookie(this)">Harold C</a>
+            <a class="dropdown-item" href="#" onClick="setCookie(this)">Jhon R</a>
+            <a class="dropdown-item" href="#" onClick="setCookie(this)">Juan S</a>
+            <a class="dropdown-item" href="#" onClick="setCookie(this)">Leonardo A</a>
+            <a class="dropdown-item" href="#" onClick="setCookie(this)">Mad P</a>
+            <a class="dropdown-item" href="#" onClick="setCookie(this)">Manuel H</a>
+            <a class="dropdown-item" href="#" onClick="setCookie(this)">Maria E</a>
+            <a class="dropdown-item" href="#" onClick="setCookie(this)">Miguel P</a>
+            <a class="dropdown-item" href="#" onClick="setCookie(this)">Nestor D</a>
+            <a class="dropdown-item" href="#" onClick="setCookie(this)">Oscar H</a>
+            <a class="dropdown-item" href="#" onClick="setCookie(this)">Rafael P</a>
+            <a class="dropdown-item" href="#" onClick="setCookie(this)">Santiago S</a>
+            <a class="dropdown-item" href="#" onClick="setCookie(this)">Sebastian L</a>
+            <a class="dropdown-item" href="#" onClick="setCookie(this)">Sonia M</a>
+            <a class="dropdown-item" href="#" onClick="setCookie(this)">William S</a>
+            <a class="dropdown-item" href="#" onClick="setCookie(this)">Yair B</a>
           </div>
-        </li>        
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="templateList" data-toggle="dropdown" aria-haspopup="true"
+            aria-expanded="false">Templates</a>
+          <div class="dropdown-menu" aria-labelledby="dropdown01" id="dropdownNameList">
+            <a class="dropdown-item" href="#">Templates</a>
+            <a class="dropdown-item" href="#" data-toggle="modal" data-target="#blackOrBlueModal">P2P setup</a>
+            <a class="dropdown-item" href="#" data-toggle="modal" data-target="#blackOrBlueModal1">Motion Recording</a>
+            <a class="dropdown-item" href="#" onClick="passwordReset()">Password Reset</a>            
+          </div>
+        </li>
       </ul>
-    </div>  
-  </nav>  
+    </div>
+  </nav>
   <main role="main" class="container-fluid">
     <form id="dataForm">
-    <div class="row" style="height:100%">
-      <div id="textarea" class="col-sm-6">
-        <textarea class="form-control form-control-sm" style="width:100%;height:100%;" id="mainText" rows="12"></textarea>
-      </div>
-      <div id="workarea" class="col-sm-6" style="height:65%;margin:0px;padding:0px;overflow-y:scroll;">
-        <div class="form-group row">
-          <label for="inputProblem" class="col-sm-2 col-form-label col-form-label-sm d-none d-sm-block">Problem</label>
-          <div class="col-sm-10">
-            <input type="text" class="form-control form-control-sm" id="inputProblem" placeholder="Problem" onInput="updateTextarea(this)">
+      <div class="row" id="mainrow">
+        <div id="workarea" class="col-sm-6">
+          <div class="form-group row">
+            <label for="inputProblem"
+              class="col-sm-2 col-form-label col-form-label-sm d-none d-sm-block">Problem</label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control form-control-sm" id="inputProblem" placeholder="Problem"
+                onInput="updateTextarea(this)">
+            </div>
           </div>
-        </div>
-        <div class="form-group row">
-          <label for="inputModel" class="col-sm-2 col-form-label col-form-label-sm d-none d-sm-block">Model</label>
-          <div class="col-sm-10 col-xs-12">
-            <input type="text" class="form-control form-control-sm" id="inputModel" placeholder="Model Number" onInput="updateTextarea(this)">
+          <div class="form-group row">
+            <label for="inputModel" class="col-sm-2 col-form-label col-form-label-sm d-none d-sm-block">Model</label>
+            <div class="col-sm-10 col-xs-12">
+              <input type="text" class="form-control form-control-sm" id="inputModel" placeholder="Model Number"
+                onInput="updateTextarea(this)">
+            </div>
           </div>
-        </div>
-        <div class="form-group row">
-          <label for="inputSerial" class="col-sm-2 col-form-label col-form-label-sm d-none d-sm-block">Serial</label>
-          <div class="col-sm-10 col-xs-12">
-            <input type="text" class="form-control form-control-sm" id="inputSerial" placeholder="Serial Number" onInput="updateTextarea(this)">
+          <div class="form-group row">
+            <label for="inputSerial" class="col-sm-2 col-form-label col-form-label-sm d-none d-sm-block">Serial</label>
+            <div class="col-sm-10 col-xs-12">
+              <input type="text" class="form-control form-control-sm" id="inputSerial" placeholder="Serial Number"
+                onInput="updateTextarea(this)">
+            </div>
           </div>
-        </div>
-        <div class="form-group row">
-          <label for="inputDistributor" class="col-sm-2 col-form-label col-form-label-sm d-none d-sm-block">Distributor</label>
-          <div class="col-sm-10 col-xs-12">
-            <input type="text" class="form-control form-control-sm" id="inputDistributor" placeholder="Distributor" onInput="updateTextarea(this)">
+          <div class="form-group row">
+            <label for="inputDistributor"
+              class="col-sm-2 col-form-label col-form-label-sm d-none d-sm-block">Distributor</label>
+            <div class="col-sm-10 col-xs-12">
+              <input type="text" class="form-control form-control-sm" id="inputDistributor" placeholder="Distributor"
+                onInput="updateTextarea(this)">
+            </div>
           </div>
-        </div>
-        <div class="form-group row">
-          <label for="inputFirmware" class="col-sm-2 col-form-label col-form-label-sm d-none d-sm-block">Firmware</label>
-          <div class="col-sm-10 col-xs-12">
-            <input type="text" class="form-control form-control-sm" id="inputFirmware" placeholder="Firmware" onInput="updateTextarea(this)">
+          <div class="form-group row">
+            <label for="inputFirmware"
+              class="col-sm-2 col-form-label col-form-label-sm d-none d-sm-block">Firmware</label>
+            <div class="col-sm-10 col-xs-12">
+              <input type="text" class="form-control form-control-sm" id="inputFirmware" placeholder="Firmware"
+                onInput="updateTextarea(this)">
+            </div>
           </div>
-        </div>
-        <div class="form-group row">
-          <label for="selectFirst" class="col-sm-6 col-form-label col-form-label-sm">First time happenning?</label>
-          <div class="col-sm-6">
-            <select class="form-control form-control-sm mr-sm-2" id="selectFirst" placeholder="First time happening?" onChange="updateTextarea(this)">
-              <option value="Yes">Yes</a>
-              <option value="No">No</a>
-            </select>
+          <div class="form-group row">
+            <label for="selectFirst" class="col-sm-2 col-form-label col-form-label-sm d-none d-sm-block">First time
+              happenning?</label>
+            <div class="col-sm-10 col-xs-12">
+              <select class="form-control form-control-sm mr-sm-2" id="selectFirst" placeholder="First time happening?"
+                onChange="updateTextarea(this)">
+                <option value="" disabled selected>First time happenning?</option>
+                <option value="Yes">Yes</a>
+                <option value="No">No</a>
+              </select>
+            </div>
           </div>
-        </div>
-        <div class="form-group row">
-          <label for="selectBefore" class="col-sm-4 col-form-label col-form-label-sm">Working before?</label>
-          <div class="col-sm-8">
-            <select class="form-control form-control-sm mr-sm-2" id="selectBefore" placeholder="Was it working before?" onChange="updateTextarea(this)">
-              <option value="Yes">Yes</a>
-              <option value="No">No</a>
-              <option value="na" selected="selected">Not asked</a>
-            </select>
+          <div class="form-group row">
+            <label for="selectBefore" class="col-sm-2 col-form-label col-form-label-sm d-none d-sm-block">Working
+              before?</label>
+            <div class="col-sm-10 col-xs-12">
+              <select class="form-control form-control-sm mr-sm-2" id="selectBefore"
+                placeholder="Was it working before?" onChange="updateTextarea(this)">
+                <option value="" disabled selected>Was it working before?</option>
+                <option value="Yes">Yes</a>
+                <option value="No">No</a>
+                <option value="na">Not asked</a>
+              </select>
+            </div>
           </div>
-        </div>
-        <div class="form-group row">
-          <label for="inputFrequency" class="col-sm-2 col-form-label col-form-label-sm d-none d-sm-block">Frequency</label>
-          <div class="col-sm-10 col-xs-12">
-            <input type="text" class="form-control form-control-sm" id="inputFrequency" placeholder="Frequency and conditions" onInput="updateTextarea(this)">
+          <div class="form-group row">
+            <label for="inputFrequency"
+              class="col-sm-2 col-form-label col-form-label-sm d-none d-sm-block">Frequency</label>
+            <div class="col-sm-10 col-xs-12">
+              <input type="text" class="form-control form-control-sm" id="inputFrequency"
+                placeholder="Frequency and conditions" onInput="updateTextarea(this)">
+            </div>
           </div>
-        </div>
-        <div class="form-group row">
-          <label for="inputError" class="col-sm-2 col-form-label col-form-label-sm d-none d-sm-block">Error</label>
-          <div class="col-sm-10 col-xs-12">
-            <input type="text" class="form-control form-control-sm" id="inputError" placeholder="Exact error if possible" onInput="updateTextarea(this)">
+          <div class="form-group row">
+            <label for="inputError" class="col-sm-2 col-form-label col-form-label-sm d-none d-sm-block">Error</label>
+            <div class="col-sm-10 col-xs-12">
+              <input type="text" class="form-control form-control-sm" id="inputError"
+                placeholder="Exact error if possible" onInput="updateTextarea(this)">
+            </div>
           </div>
-        </div>
-        <div class="form-group row">
-          <label for="inputSoftware" class="col-sm-2 col-form-label col-form-label-sm d-none d-sm-block">Software</label>
-          <div class="col-sm-10 col-xs-12">
-            <input type="text" class="form-control form-control-sm" id="inputSoftware" placeholder="App/Software used" onInput="updateTextarea(this)">
+          <div class="form-group row">
+            <label for="inputSoftware"
+              class="col-sm-2 col-form-label col-form-label-sm d-none d-sm-block">Software</label>
+            <div class="col-sm-10 col-xs-12">
+              <input type="text" class="form-control form-control-sm" id="inputSoftware" placeholder="App/Software used"
+                onInput="updateTextarea(this)">
+            </div>
           </div>
-        </div>
-        <div class="form-group row">
-          <label for="selectWhere" class="col-sm-4 col-form-label col-form-label-sm">Happens where?</label>
-          <div class="col-sm-4">
-            <select class="form-control form-control-sm mr-sm-2" id="selectWhere" onChange="updateTextarea(this)">
-              <option value="Monitor">Monitor</a>
-              <option value="PC">PC</a>
-              <option value="Phone">Phone</a>
-              <option value="Tablet">Tablet</a>
-              <option value="na" selected="selected">NA</a>
-            </select>
-          </div>
-          <div class="col-sm-4">
-            <select class="form-control form-control-sm mr-sm-2" id="selectWhere2" onChange="updateTextarea(this)">
+          <div class="form-group row">
+            <label for="selectWhere" class="col-sm-2 col-form-label col-form-label-sm ">Happens where?</label>
+            <div class="col-sm-5">
+              <select class="form-control form-control-sm" id="selectWhere" onChange="updateTextarea(this)">
                 <option value="Monitor">Monitor</a>
                 <option value="PC">PC</a>
+                <option value="Mac">Mac</a>
                 <option value="Phone">Phone</a>
                 <option value="Tablet">Tablet</a>
                 <option value="na" selected="selected">NA</a>
-            </select>
+              </select>
+            </div>
+            <div class="col-sm-5">
+              <select class="form-control form-control-sm" id="selectWhere2" onChange="updateTextarea(this)">
+                <option value="Monitor">Monitor</a>
+                <option value="PC">PC</a>
+                <option value="Mac">Mac</a>
+                <option value="Phone">Phone</a>
+                <option value="Tablet">Tablet</a>
+                <option value="na" selected="selected">NA</a>
+              </select>
+            </div>
           </div>
-        </div>
-        <div class="form-group row">
-          <label for="selectCompatible" class="col-sm-6 col-form-label col-form-label-sm">Are units compatible?</label>
-          <div class="col-sm-6">
-            <select class="form-control form-control-sm mr-sm-2" id="selectCompatible" placeholder="Are the units compatible?" onInput="updateTextarea(this)">
-              <option value="Yes">Yes</a>
-              <option value="No">No</a>
-              <option value="na" selected="selected">Not asked</a>
-            </select>
+          <div class="form-group row">
+            <label for="selectCompatible" class="col-sm-6 col-form-label col-form-label-sm d-none d-sm-block">Are units
+              compatible?</label>
+            <div class="col-sm-6">
+              <select class="form-control form-control-sm mr-sm-2" id="selectCompatible"
+                placeholder="Are the units compatible?" onInput="updateTextarea(this)">
+                <option value="" disabled selected>Are the units compatible?</option>
+                <option value="Yes">Yes</a>
+                <option value="No">No</a>
+                <option value="na">Not asked</a>
+              </select>
+            </div>
           </div>
-        </div>
-        <div class="form-group row">
-          <label for="inputSettings" class="col-sm-2 col-form-label col-form-label-sm d-none d-sm-block">Settings</label>
-          <div class="col-sm-10 col-xs-12">
-            <input type="text" class="form-control form-control-sm" id="inputSettings" placeholder="Settings verified" onInput="updateTextarea(this)">
+          <!-- <div class="form-group row">
+            <label for="inputSettings"
+              class="col-sm-2 col-form-label col-form-label-sm d-none d-sm-block">Settings</label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control form-control-sm" id="inputSettings" placeholder="Settings verified"
+                onInput="updateTextarea(this)">
+            </div>
+          </div> -->
+
+          <div class="form-group row">
+            <label for="inputTx"
+              class="col-sm-2 col-form-label col-form-label-sm d-none d-sm-block">Troubleshoot</label>
+            <div class="col-sm-10">
+              <textarea class="form-control form-control-sm" id="inputTx" rows="14" placeholder="Troubleshoot"
+                onInput="updateTextarea(this)"></textarea>
+            </div>
           </div>
-        </div>
-<!--        
-        <div class="form-group row">
-          <label for="selectResolved" class="col-sm-6 col-form-label col-form-label-sm">Issue resolved?</label>
-          <div class="col-sm-6">
-            <select class="form-control form-control-sm mr-sm-2" id="selectResolved" placeholder="Issue resolved?" onChange="updateTextarea(this)">
-              <option value="Yes" selected="selected">Yes</a>
-              <option value="No">No</a>
-            </select>
+
+          <div class="form-group row">
+            <label for="inputMissing" class="col-sm-2 col-form-label col-form-label-sm d-none d-sm-block">Missing
+              steps</label>
+            <div class="col-sm-10">
+              <textarea class="form-control form-control-sm" id="inputMissing" rows="2" placeholder="Missing steps"
+                onInput="updateTextarea(this)"></textarea>
+            </div>
           </div>
-        </div>
--->        
-        <div class="form-group row">
-          <label for="inputMissing" class="col-sm-4 col-form-label col-form-label-sm d-none d-sm-block">Missing steps</label>
-          <div class="col-sm-8">
-            <input type="text" class="form-control form-control-sm" id="inputMissing" placeholder="Missing steps"  onInput="updateTextarea(this)">
-          </div>
-        </div>
-<!--
+          <!--
         <div class="form-group row">
           <div class="col-sm text-right">
             <button type="button" class="btn btn-primary btn-sm" accesskey="r" onclick="reset()">Reset</button>
-          </div>        
+          </div>
 -->
         </div>
+        <div id="textarea" class="col-sm-6">
+          <textarea class="form-control form-control-sm" style="width:100%;height:100%;" id="mainText"
+            rows="12"></textarea>
+        </div>
+        <!-- Modals -->
+        <div class="modal fade" id="blackOrBlueModal" tabindex="-1" role="dialog" aria-labelledby="blackOrBlueModal"
+          aria-hidden="true">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="blackOrBlueModal">Black or Blue interface?</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal"
+                  onClick="P2PSetup('Black')">Black</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal"
+                  onClick="P2PSetup('Blue')">Blue</button>
+              </div>
+              <div class="modal-footer">
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Awesome repeated code -->
+        <div class="modal fade" id="blackOrBlueModal1" tabindex="-1" role="dialog" aria-labelledby="blackOrBlueModal1"
+          aria-hidden="true">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="blackOrBlueModal1">Black or Blue interface?</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal"
+                  onClick="motionRecording('Black')">Black</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal"
+                  onClick="motionRecording('Blue')">Blue</button>
+              </div>
+              <div class="modal-footer">
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal fade" id="resetModal" tabindex="-1" role="dialog" aria-labelledby="resetModal"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="resetModal">Do you want to reset?</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+              <button type="button" class="btn btn-primary" data-dismiss="modal"
+                onClick="reset()">Reset</button>
+              
+            </div>
+            <div class="modal-footer">
+            </div>
+          </div>
+        </div>
       </div>
-    </div>
+      </div>
+      </div>
     </form>
   </main>
-    
-  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+    integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+    crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"
+    integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut"
+    crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"
+    integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k"
+    crossorigin="anonymous"></script>
   <script>
     // Global text from main textarea
     var mainText = document.getElementById("mainText");
 
     // Global string defaultHash, stores hash in its original form
     // fieldName:[templateText,isMandatory,value]
-    const defaultHash = {      
-      "inputProblem":["Problem",true,""],
-      "inputModel":["Device Model",true,""],
-      "inputSerial":["SN",true,""],
-      "inputDistributor":["Distributor",true,""],
-      "inputFirmware":["Firmware",false,""],
-      "selectFirst":["\n- First time happening?",true,"Yes"],
-      "selectBefore":["- Was it working before?",false,""],
-      "inputFrequency":["- How often does it happen and under what conditions?",false,""],
-      "inputError":["- Error",false,""],
-      "inputSoftware":["- App/Software used",false,""],
-      "selectWhere":["- Problem happens on (monitor, PC, phone, tablet, ipad)",false,""],
-      "selectWhere2":["",false,""],
-      "selectCompatible":["- Units are compatible)",false,""],
-      "inputSettings":["- Settings were verified",false,""],
-      "inputTx":["\nTroubleshooting",true,""],      
-      "inputMissing":["\nMissing Steps",false ,""]
+    // Application default status
+    const defaultHash = {
+      "inputProblem": ["Problem", true, ""],
+      "inputModel": ["Device Model", true, ""],
+      "inputSerial": ["SN", true, ""],
+      "inputDistributor": ["Distributor", true, ""],
+      "inputFirmware": ["Firmware", false, ""],
+      "selectFirst": ["\n- First time happening?", true, "Yes"],
+      "selectBefore": ["- Was it working before?", false, ""],
+      "inputFrequency": ["- How often does it happen and under what conditions?", false, ""],
+      "inputError": ["- Error", false, ""],
+      "inputSoftware": ["- App/Software used", false, ""],
+      "selectWhere": ["- Problem happens on", false, ""],
+      "selectWhere2": ["", false, ""],
+      "selectCompatible": ["- Units are compatible)", false, ""],
+      "inputTx": ["\nTroubleshooting", true, ""],
+      "inputMissing": ["\nMissing Steps", false, ""]
     };
 
     // Global string formHash, copies defaultHash
-	  var formHash = JSON.parse(JSON.stringify(defaultHash));
+    var formHash = JSON.parse(JSON.stringify(defaultHash));
 
     // Global current date in the required format
     var d = new Date();
-    var currentDate = (d.getMonth() + 1) + "/" + d.getDate()  + "/" + d.getFullYear(); 	  
+    var currentDate = (d.getMonth() + 1) + "/" + d.getDate() + "/" + d.getFullYear();
 
-    var names = document.querySelectorAll("div#dropdownNameList > a")
 
-    for (var i = 0; i < names.length; i++) {
-      names[i].addEventListener('click', setCookie(names[i]);
-    }
-    
+    // Add event listener to elements in the dropdown menu
+    // Couldn't make it work even with anonymous functions, switched to old school
+
+    // var names = document.querySelectorAll(".dropdown-item");
+
+    // for (let i in names) {
+    //   document.addEventListener('click', function() {
+    //     setCookie(names[i]);
+    //   });
+    // }
+
     function setCookie(element) {
-      document.getElementById("dropdownWizard").innerHTML = element.innerHTML;
+      document.getElementById("dropdownWizard").textContent = element.textContent;
       updateTextarea("reset");
     }
 
-    function getCookie(cname) {
-      var name = cname + "=";
-      var decodedCookie = decodeURIComponent(document.cookie);
-      var ca = decodedCookie.split(';');
-      for(var i = 0; i <ca.length; i++) {
-        var c = ca[i];
-        while (c.charAt(0) == ' ') {
-          c = c.substring(1);
-        }
-
-        if (c.indexOf(name) == 0) {
-          return c.substring(name.length, c.length);
-        }
-      }
-      return "";
-    }
-    
     // updateTextarea(): When a user types in the fields, textarea gets updated automatically
-    function updateTextarea(element) {      
-      var str = document.getElementById("dropdownWizard").innerHTML + " - " + currentDate + "\n\n";      
+    function updateTextarea(element) {
+      var str = document.getElementById("dropdownWizard").innerHTML + " - " + currentDate + "\n\n";
       // update hash with the new info, reset if needed
       if (element == "reset")
         formHash = JSON.parse(JSON.stringify(defaultHash));
       else
         formHash[element.id][2] = element.value;
-    
-      // create and outputstring from hash  
+
+      // create and outputstring from hash
       for (var i in formHash) {
         // if its empty and optional
-        if ((formHash[i][2] == "" || formHash[i][2] == "na" ) && !formHash[i][1]) {
+        if ((formHash[i][2] == "" || formHash[i][2] == "na") && !formHash[i][1]) {
           str += "";
         } else {
           //Special case for multiple selection fields, works but yeah
-          if ((i == "selectWhere" || i == "selectWhere2" ) && formHash["selectWhere2"][2] != "na") {
+          if ((i == "selectWhere" || i == "selectWhere2") && formHash["selectWhere2"][2] != "na") {
             if (i == "selectWhere2") {
               ;
             } else {
               str += formHash[i][0] + ": " + formHash[i][2] + ", " + formHash["selectWhere2"][2] + "\n";
             }
-          } else {        
+          } else {
             str += formHash[i][0] + ": " + formHash[i][2] + "\n";
-	        }
+          }
         }
       }
-      
-      mainText.value = str;   
+
+      mainText.value = str;
+
     }
-    
+
     function reset() {
       document.getElementById("dataForm").reset();
       updateTextarea("reset");
     }
 
+    // Templates
+    // Password Reset
+    function passwordReset() {
+      var passwordReset = JSON.parse(JSON.stringify(defaultHash));
+      passwordReset.inputProblem[0, 2] = "Password Reset";
+      passwordReset.inputTx[0, 2] = "Date on the screen is <INSERT DATE HERE>.\nSent email with the passwords and asked to follow the instructions on the email.";
+
+      for (var k in passwordReset) {
+        document.getElementById(k).value = passwordReset[k][2];
+      }
+
+      updateTextarea(document.getElementById("inputProblem"));
+      updateTextarea(document.getElementById("inputTx"));
+    }
+
+    // Remote connection setup
+    function P2PSetup(interface) {
+      var passwordReset = JSON.parse(JSON.stringify(defaultHash));
+      passwordReset.inputProblem[0, 2] = "P2P connection setup";
+      if (interface == "Blue") {
+        passwordReset.inputTx[0, 2] = "Main Menu > Network (Setting) > P2P and enable P2P. Click OK Status 'Not Connected'. \r" +
+          "Main Menu > Network (Setting) > TCP/IP > Edit (Pencil) Ethernet Port 1 and enable DHCP. Click OK. \r" +
+          "Enable DHCP again. Click Apply. Main Menu > Shut Down > Restart to reboot the unit. \r" +
+          "Main Menu > Network (Setting) > P2P. Status: 'Connected' \r" +
+          "On the Phone/Tablet Open iDMSS/gDMSS. Click on the Three lines on the top left \r" +
+          "Device Manager > Add > Camera > Wired Device > P2P. + \r" +
+          "Fill the information on Screen. Click 'Start Live Preview'";
+      } else {
+        passwordReset.inputTx[0, 2] = "Main Menu > Network > TCP > Enable DHCP > Apply\r" +
+          "P2P > Enable > Apply \r" +
+          "Top Right Icon > Reboot\r" +
+          "P2P > Status > Connectedr" +
+          "On the Phone/Tablet Open iDMSS/gDMSS\r" +
+          "Click on the Three lines on the top left.\r" +
+          "Device Manager > Add > Camera > Wired Device > P2P\r" +
+          "Fill the information on Screen. Click 'Start Live Preview'";
+      }
+
+      for (var k in passwordReset) {
+        document.getElementById(k).value = passwordReset[k][2];
+      }
+
+      updateTextarea(document.getElementById("inputProblem"));
+      updateTextarea(document.getElementById("inputTx"));
+    }
+
+    // Motion Setup
+    function motionRecording(interface) {
+      var passwordReset = JSON.parse(JSON.stringify(defaultHash));
+      passwordReset.inputProblem[0, 2] = "Motion recording setup";
+      if (interface == "Blue") {
+        passwordReset.inputTx[0, 2] = "Main Menu > Event under Settings > Video Detect > Motion Detect > Enable.\r" +
+          "Enable Record Channel. Channel is the same as the camera channel.\r" +
+          "Main Menu > Storage > Schedule > Hit Motion/MD > Hit All > Draw motion lines over the timeline.\r" +
+          "Main Menu > Storage > Record > Cameras are on Auto for the Main Stream\r";
+      } else {
+        passwordReset.inputTx[0, 2] = "Main Menu > Network > TCP > Enable DHCP > Apply\r" +
+          "Main Menu > Management > Camera > Video Detect > Motion Detect > Enable MD\r" +
+          "Enable Record Channel. Channel is the same as the camera channel.\r" +
+          "Main Menu > Management > Storage > Schedule > Hit Motion/MD > Hit All > Draw motion lines over the timeline.\r" +
+          "Main Menu > Storage > Record > Cameras are on Auto for the Main Stream";
+      }
+
+      for (var k in passwordReset) {
+        document.getElementById(k).value = passwordReset[k][2];
+      }
+
+      updateTextarea(document.getElementById("inputProblem"));
+      updateTextarea(document.getElementById("inputTx"));
+    }
+
     // Shortcuts
     function doc_keyUp(e) {
-      // alt+r 
-      if (e.altKey && e.keyCode == 82) {          
-          reset();
-        }
-      if (e.altKey && e.keyCode == 71) {          
-          mainText.select();
-          document.execCommand("copy");
-        }
+      // alt+r
+      if (e.altKey && e.keyCode == 82) {
+        reset();
+      }
+      // alt+g
+      if (e.altKey && e.keyCode == 71) {
+        mainText.select();
+        document.execCommand("copy");
+      }
     }
     document.addEventListener('keyup', doc_keyUp, false);
-    
+
     document.addEventListener('keyup', doc_keyUp, false);
   </script>
 </body>
+
 </html>
