@@ -1,4 +1,12 @@
 <!--
+  Dahua tool v.0.8
+  - All caps for serial/model
+  - Fix reset function issues
+  - Remove extra templates
+  - The where fields taking the whole width when collapsed
+  Dahua tool v.0.7
+  - Added copy button and added a modal to the reset button
+  - Fixed reset function
   Dahua tool v 0.6
   - Added Template interface
   - Added modal to select between diferent recorder interfaces  
@@ -41,7 +49,7 @@
 
     #textarea {
       padding: 0px;
-      margin: 0px;      
+      margin: 0px;
     }
 
     #workarea {
@@ -57,9 +65,10 @@
       padding: 1px;
       margin: 0px;
     }
+
     /* Too many items will not fit on the screen, reduced padding to make them fit */
     .dropdown-item {
-      padding-top:2px;
+      padding-top: 0px;
     }
 
     #mainText {
@@ -75,20 +84,25 @@
     }
 
     @media (max-width: 575.98px) {
-      
-      #workarea { height: 65%; }
 
-      #textarea { height: 35%; }
+      #workarea {
+        height: 70%;
+      }
 
-      /* #selectWhere, #selectWhere2{
-        width: 45%;
-      } */
+      #textarea {
+        height: 30%;
+      }
+
+      #divWhere1,
+      #divWhere2 {
+        width: 50%;
+      }
     }
   </style>
   <title>Dahua Tool</title>
 </head>
 
-<body onload="reset()">
+<body onload="formReset()">
   <nav class="navbar navbar-expand navbar-light fixed-top">
     <a class="navbar-brand" href="#"><img
         src="https://us.dahuasecurity.com/wp-content/uploads/2017/08/Dahua-LOGO_black_with_red_D.png"
@@ -96,7 +110,11 @@
     <div>
       <ul class="navbar-nav mr-auto">
         <li class="nav-item active">
-          <a class="nav-link" href="#" data-toggle="modal" data-target="#resetModal">Reset <span class="sr-only">(current)</span></a>
+          <a class="nav-link" href="#" data-toggle="modal" data-target="#resetModal">Reset <span
+              class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item active">
+          <a class="nav-link" href="#" onClick="copyTextArea()">Copy <span class="sr-only">(current)</span></a>
         </li>
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="dropdownWizard" data-toggle="dropdown" aria-haspopup="true"
@@ -133,10 +151,9 @@
           <a class="nav-link dropdown-toggle" href="#" id="templateList" data-toggle="dropdown" aria-haspopup="true"
             aria-expanded="false">Templates</a>
           <div class="dropdown-menu" aria-labelledby="dropdown01" id="dropdownNameList">
-            <a class="dropdown-item" href="#">Templates</a>
             <a class="dropdown-item" href="#" data-toggle="modal" data-target="#blackOrBlueModal">P2P setup</a>
             <a class="dropdown-item" href="#" data-toggle="modal" data-target="#blackOrBlueModal1">Motion Recording</a>
-            <a class="dropdown-item" href="#" onClick="passwordReset()">Password Reset</a>            
+            <a class="dropdown-item" href="#" onClick="passwordReset()">Password Reset</a>
           </div>
         </li>
       </ul>
@@ -158,14 +175,14 @@
             <label for="inputModel" class="col-sm-2 col-form-label col-form-label-sm d-none d-sm-block">Model</label>
             <div class="col-sm-10 col-xs-12">
               <input type="text" class="form-control form-control-sm" id="inputModel" placeholder="Model Number"
-                onInput="updateTextarea(this)">
+                onInput="updateTextarea(this)" onkeyup="switchCase(this)">
             </div>
           </div>
           <div class="form-group row">
             <label for="inputSerial" class="col-sm-2 col-form-label col-form-label-sm d-none d-sm-block">Serial</label>
             <div class="col-sm-10 col-xs-12">
               <input type="text" class="form-control form-control-sm" id="inputSerial" placeholder="Serial Number"
-                onInput="updateTextarea(this)">
+                onInput="updateTextarea(this)" onkeyup="switchCase(this)">
             </div>
           </div>
           <div class="form-group row">
@@ -193,6 +210,7 @@
                 <option value="" disabled selected>First time happenning?</option>
                 <option value="Yes">Yes</a>
                 <option value="No">No</a>
+                <option value="na">Not asked</a>
               </select>
             </div>
           </div>
@@ -221,7 +239,7 @@
             <label for="inputError" class="col-sm-2 col-form-label col-form-label-sm d-none d-sm-block">Error</label>
             <div class="col-sm-10 col-xs-12">
               <input type="text" class="form-control form-control-sm" id="inputError"
-                placeholder="Exact error if possible" onInput="updateTextarea(this)">
+                placeholder="Exact error if possible" onInp1ut="updateTextarea(this)">
             </div>
           </div>
           <div class="form-group row">
@@ -233,25 +251,28 @@
             </div>
           </div>
           <div class="form-group row">
-            <label for="selectWhere" class="col-sm-2 col-form-label col-form-label-sm ">Happens where?</label>
-            <div class="col-sm-5">
+            <label for="selectWhere" class="col-sm-2 col-form-label col-form-label-sm d-none d-sm-block">Happens
+              where?</label>
+            <div id="divWhere1" class="col-sm-5">
               <select class="form-control form-control-sm" id="selectWhere" onChange="updateTextarea(this)">
+                <option value="" disabled selected>Happens on</option>
                 <option value="Monitor">Monitor</a>
                 <option value="PC">PC</a>
                 <option value="Mac">Mac</a>
                 <option value="Phone">Phone</a>
                 <option value="Tablet">Tablet</a>
-                <option value="na" selected="selected">NA</a>
+                <option value="na">NA</a>
               </select>
             </div>
-            <div class="col-sm-5">
+            <div id="divWhere2" class="col-sm-5">
               <select class="form-control form-control-sm" id="selectWhere2" onChange="updateTextarea(this)">
+                <option value="" disabled selected>Happens on</option>
                 <option value="Monitor">Monitor</a>
                 <option value="PC">PC</a>
                 <option value="Mac">Mac</a>
                 <option value="Phone">Phone</a>
                 <option value="Tablet">Tablet</a>
-                <option value="na" selected="selected">NA</a>
+                <option value="na">NA</a>
               </select>
             </div>
           </div>
@@ -352,26 +373,25 @@
           </div>
         </div>
         <div class="modal fade" id="resetModal" tabindex="-1" role="dialog" aria-labelledby="resetModal"
-        aria-hidden="true">
-        <div class="modal-dialog" role="document">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="resetModal">Do you want to reset?</h5>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div class="modal-body">
-              <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
-              <button type="button" class="btn btn-primary" data-dismiss="modal"
-                onClick="reset()">Reset</button>
-              
-            </div>
-            <div class="modal-footer">
+          aria-hidden="true">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="resetModal">Do you want to reset?</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" onClick="formReset()">Reset</button>
+
+              </div>
+              <div class="modal-footer">
+              </div>
             </div>
           </div>
         </div>
-      </div>
       </div>
       </div>
     </form>
@@ -399,7 +419,7 @@
       "inputSerial": ["SN", true, ""],
       "inputDistributor": ["Distributor", true, ""],
       "inputFirmware": ["Firmware", false, ""],
-      "selectFirst": ["\n- First time happening?", true, "Yes"],
+      "selectFirst": ["\n- First time happening?", false, ""],
       "selectBefore": ["- Was it working before?", false, ""],
       "inputFrequency": ["- How often does it happen and under what conditions?", false, ""],
       "inputError": ["- Error", false, ""],
@@ -432,7 +452,7 @@
 
     function setCookie(element) {
       document.getElementById("dropdownWizard").textContent = element.textContent;
-      updateTextarea("reset");
+      updateTextarea(document.getElementById("inputProblem"));
     }
 
     // updateTextarea(): When a user types in the fields, textarea gets updated automatically
@@ -446,30 +466,40 @@
 
       // create and outputstring from hash
       for (var i in formHash) {
-        // if its empty and optional
+        // if its empty or na and optional
         if ((formHash[i][2] == "" || formHash[i][2] == "na") && !formHash[i][1]) {
           str += "";
-        } else {
-          //Special case for multiple selection fields, works but yeah
-          if ((i == "selectWhere" || i == "selectWhere2") && formHash["selectWhere2"][2] != "na") {
-            if (i == "selectWhere2") {
-              ;
-            } else {
-              str += formHash[i][0] + ": " + formHash[i][2] + ", " + formHash["selectWhere2"][2] + "\n";
-            }
+        } else if ((i == "selectWhere" || i == "selectWhere2") && formHash["selectWhere2"][2] != "na") {
+          //Special case for the "happens where" fields, works but yeah
+          if (i == "selectWhere2") {
+            ;
           } else {
-            str += formHash[i][0] + ": " + formHash[i][2] + "\n";
+            str += formHash[i][0] + ": " + formHash[i][2] + ", " + formHash["selectWhere2"][2] + "\n";
           }
+          // Need an additional return carriages for the troubleshoot field only
+        } else if (i == "inputTx") {
+          str += formHash[i][0] + ": \n\n" + formHash[i][2] + "\n";
+        } else if (i == "inputModel" || i == "inputSerial") {
+          str += formHash[i][0] + ": " + formHash[i][2].toUpperCase() + "\n";        
+        } else {
+          str += formHash[i][0] + ": " + formHash[i][2] + "\n";
         }
       }
-
       mainText.value = str;
-
     }
 
-    function reset() {
+    function formReset() {
       document.getElementById("dataForm").reset();
       updateTextarea("reset");
+    }
+
+    function copyTextArea() {
+      mainText.select();
+      document.execCommand("copy");
+    }
+
+    function switchCase(obj) {
+      obj.value = obj.value.toUpperCase()
     }
 
     // Templates
@@ -492,22 +522,25 @@
       var passwordReset = JSON.parse(JSON.stringify(defaultHash));
       passwordReset.inputProblem[0, 2] = "P2P connection setup";
       if (interface == "Blue") {
-        passwordReset.inputTx[0, 2] = "Main Menu > Network (Setting) > P2P and enable P2P. Click OK Status 'Not Connected'. \r" +
-          "Main Menu > Network (Setting) > TCP/IP > Edit (Pencil) Ethernet Port 1 and enable DHCP. Click OK. \r" +
-          "Enable DHCP again. Click Apply. Main Menu > Shut Down > Restart to reboot the unit. \r" +
-          "Main Menu > Network (Setting) > P2P. Status: 'Connected' \r" +
-          "On the Phone/Tablet Open iDMSS/gDMSS. Click on the Three lines on the top left \r" +
-          "Device Manager > Add > Camera > Wired Device > P2P. + \r" +
-          "Fill the information on Screen. Click 'Start Live Preview'";
+        passwordReset.inputTx[0, 2] = "Main Menu > Network (Setting) > P2P and enable P2P. Click OK.\r" +
+          "Main Menu > Network (Setting) > TCP/IP > Edit (Pencil). Ethernet Port 1 and enable DHCP. Click OK.\r" +
+          "Status: 'Not Connected'.\r" +
+          "Enable DHCP again. Click Apply. Main Menu > Shut Down > Restart to reboot the unit.\r" +
+          "Main Menu > Network (Setting) > P2P.\r" +
+          "P2P Status: 'Connected'.\r" +
+          "On the Phone/Tablet open iDMSS/gDMSS. Click on the three lines on the top left.\r" +
+          "Device Manager > Add > Camera > Wired Device > P2P.\r" +
+          "Fill the information on the screen. Click 'Start Live Preview'\r";
       } else {
-        passwordReset.inputTx[0, 2] = "Main Menu > Network > TCP > Enable DHCP > Apply\r" +
-          "P2P > Enable > Apply \r" +
-          "Top Right Icon > Reboot\r" +
-          "P2P > Status > Connectedr" +
-          "On the Phone/Tablet Open iDMSS/gDMSS\r" +
+        passwordReset.inputTx[0, 2] = "Main Menu > Network > TCP > Enable DHCP > Apply.\r" +
+          "P2P > Enable > Apply.\r" +
+          "P2P Status: 'Offline'.\r" +
+          "Top Right Icon > Reboot.\r" +
+          "P2P Status: 'Online'.\r" +
+          "On the Phone/Tablet Open iDMSS/gDMSS.\r" +
           "Click on the Three lines on the top left.\r" +
-          "Device Manager > Add > Camera > Wired Device > P2P\r" +
-          "Fill the information on Screen. Click 'Start Live Preview'";
+          "Device Manager > Add > Camera > Wired Device > P2P.\r" +
+          "Fill the information on screen. Click 'Start Live Preview'.\r";
       }
 
       for (var k in passwordReset) {
@@ -528,8 +561,7 @@
           "Main Menu > Storage > Schedule > Hit Motion/MD > Hit All > Draw motion lines over the timeline.\r" +
           "Main Menu > Storage > Record > Cameras are on Auto for the Main Stream\r";
       } else {
-        passwordReset.inputTx[0, 2] = "Main Menu > Network > TCP > Enable DHCP > Apply\r" +
-          "Main Menu > Management > Camera > Video Detect > Motion Detect > Enable MD\r" +
+        passwordReset.inputTx[0, 2] = "Main Menu > Management > Camera > Video Detect > Motion Detect > Enable MD\r" +
           "Enable Record Channel. Channel is the same as the camera channel.\r" +
           "Main Menu > Management > Storage > Schedule > Hit Motion/MD > Hit All > Draw motion lines over the timeline.\r" +
           "Main Menu > Storage > Record > Cameras are on Auto for the Main Stream";
@@ -543,21 +575,20 @@
       updateTextarea(document.getElementById("inputTx"));
     }
 
-    // Shortcuts
+    // Keyboard Shortcuts
     function doc_keyUp(e) {
       // alt+r
       if (e.altKey && e.keyCode == 82) {
-        reset();
+        $(document).ready(function () {
+          $("#resetModal").modal();
+        });
       }
       // alt+g
       if (e.altKey && e.keyCode == 71) {
-        mainText.select();
-        document.execCommand("copy");
+        copyTextArea();
       }
     }
-    document.addEventListener('keyup', doc_keyUp, false);
-
-    document.addEventListener('keyup', doc_keyUp, false);
+    document.addEventListener('keyup', doc_keyUp, false);    
   </script>
 </body>
 
