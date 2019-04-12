@@ -1,0 +1,69 @@
+    body,
+    html,
+    main,
+    form,
+    #mainrow {
+      height: 100%;
+      font-size: 0.9em;
+    }
+
+    body {
+      overflow-y: hidden;
+    }
+
+    main {
+      padding: 0px;
+      padding-top: 5em;
+    }
+
+    #textarea {
+      padding: 0px;
+      margin: 0px;
+    }
+
+    #workarea {
+      /* height: 65%; */
+      margin: 0px;
+      padding: 0px;
+      overflow-y: hidden;
+    }
+
+    .form-control,
+    .form-group,
+    .form-group row {
+      padding: 1px;
+      margin: 0px;
+    }
+
+    /* Too many items will not fit on the screen, reduced padding to make them fit */
+    .dropdown-item {
+      padding-top: 0px;
+    }
+
+    #mainText {
+      font-family: "Consolas", monospace;
+      background-color: #EFF;
+    }
+
+    .navbar-light,
+    .navbar-light a,
+    navbar-brand {
+      background-color: #FFF;
+      color: #A90329 !important;
+    }
+
+    @media (max-width: 575.98px) {
+
+      #workarea {
+        height: 70%;
+      }
+
+      #textarea {
+        height: 30%;
+      }
+
+      #divWhere1,
+      #divWhere2 {
+        width: 50%;
+      }
+    }
