@@ -1,4 +1,3 @@
-<!--
   Dahua tool v.0.9
   - Cleaned scripts and templates
   - Separated code in files
@@ -23,4 +22,3 @@
   - Added groundwork for templates
   - Missing selector for templates now
   - Issue with the onclick event for the agent dropdown  
--->
