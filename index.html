@@ -1,8 +1,8 @@
 <!--
-  Dahua tool v.0.9
-  - Cleaned scripts and templates
+  Dahua tool v.0.9  
   - Separated code in files
-  - .ts extension used due to system limitations.
+  - Corrected templates
+  - Fixed bug with error field not displaying
   Dahua tool v.0.8
   - All caps for serial/model
   - Fix reset function issues
@@ -35,7 +35,7 @@
   <title>Dahua Tool</title>
 </head>
 
-<body onload="formReset()">
+<body onLoad="loadStorage();formReset()">
   <nav class="navbar navbar-expand navbar-light fixed-top">
     <a class="navbar-brand" href="#"><img
         src="https://us.dahuasecurity.com/wp-content/uploads/2017/08/Dahua-LOGO_black_with_red_D.png"
@@ -54,30 +54,30 @@
             aria-expanded="false">Your Name</a>
           <div class="dropdown-menu" aria-labelledby="dropdown01" id="dropdownNameList">
             <a class="dropdown-item" href="#">Your Name Here</a>
-            <a class="dropdown-item" href="#" onClick="setCookie(this)">Alejandro P</a>
-            <a class="dropdown-item" href="#" onClick="setCookie(this)">Alex B</a>
-            <a class="dropdown-item" href="#" onClick="setCookie(this)">Armando A</a>
-            <a class="dropdown-item" href="#" onClick="setCookie(this)">Camila R</a>
-            <a class="dropdown-item" href="#" onClick="setCookie(this)">Daniel C</a>
-            <a class="dropdown-item" href="#" onClick="setCookie(this)">David Y</a>
-            <a class="dropdown-item" href="#" onClick="setCookie(this)">Dayan P</a>
-            <a class="dropdown-item" href="#" onClick="setCookie(this)">Giraldo A</a>
-            <a class="dropdown-item" href="#" onClick="setCookie(this)">Harold C</a>
-            <a class="dropdown-item" href="#" onClick="setCookie(this)">Jhon R</a>
-            <a class="dropdown-item" href="#" onClick="setCookie(this)">Juan S</a>
-            <a class="dropdown-item" href="#" onClick="setCookie(this)">Leonardo A</a>
-            <a class="dropdown-item" href="#" onClick="setCookie(this)">Mad P</a>
-            <a class="dropdown-item" href="#" onClick="setCookie(this)">Manuel H</a>
-            <a class="dropdown-item" href="#" onClick="setCookie(this)">Maria E</a>
-            <a class="dropdown-item" href="#" onClick="setCookie(this)">Miguel P</a>
-            <a class="dropdown-item" href="#" onClick="setCookie(this)">Nestor D</a>
-            <a class="dropdown-item" href="#" onClick="setCookie(this)">Oscar H</a>
-            <a class="dropdown-item" href="#" onClick="setCookie(this)">Rafael P</a>
-            <a class="dropdown-item" href="#" onClick="setCookie(this)">Santiago S</a>
-            <a class="dropdown-item" href="#" onClick="setCookie(this)">Sebastian L</a>
-            <a class="dropdown-item" href="#" onClick="setCookie(this)">Sonia M</a>
-            <a class="dropdown-item" href="#" onClick="setCookie(this)">William S</a>
-            <a class="dropdown-item" href="#" onClick="setCookie(this)">Yair B</a>
+            <a class="dropdown-item" href="#" onClick="setName(this)">Alejandro P</a>
+            <a class="dropdown-item" href="#" onClick="setName(this)">Alex B</a>
+            <a class="dropdown-item" href="#" onClick="setName(this)">Armando A</a>
+            <a class="dropdown-item" href="#" onClick="setName(this)">Camila R</a>
+            <a class="dropdown-item" href="#" onClick="setName(this)">Daniel C</a>
+            <a class="dropdown-item" href="#" onClick="setName(this)">David Y</a>
+            <a class="dropdown-item" href="#" onClick="setName(this)">Dayan P</a>
+            <a class="dropdown-item" href="#" onClick="setName(this)">Giraldo A</a>
+            <a class="dropdown-item" href="#" onClick="setName(this)">Harold C</a>
+            <a class="dropdown-item" href="#" onClick="setName(this)">Jhon R</a>
+            <a class="dropdown-item" href="#" onClick="setName(this)">Juan S</a>
+            <a class="dropdown-item" href="#" onClick="setName(this)">Leonardo A</a>
+            <a class="dropdown-item" href="#" onClick="setName(this)">Mad P</a>
+            <a class="dropdown-item" href="#" onClick="setName(this)">Manuel H</a>
+            <a class="dropdown-item" href="#" onClick="setName(this)">Maria E</a>
+            <a class="dropdown-item" href="#" onClick="setName(this)">Miguel P</a>
+            <a class="dropdown-item" href="#" onClick="setName(this)">Nestor D</a>
+            <a class="dropdown-item" href="#" onClick="setName(this)">Oscar H</a>
+            <a class="dropdown-item" href="#" onClick="setName(this)">Rafael P</a>
+            <a class="dropdown-item" href="#" onClick="setName(this)">Santiago S</a>
+            <a class="dropdown-item" href="#" onClick="setName(this)">Sebastian L</a>
+            <a class="dropdown-item" href="#" onClick="setName(this)">Sonia M</a>
+            <a class="dropdown-item" href="#" onClick="setName(this)">William S</a>
+            <a class="dropdown-item" href="#" onClick="setName(this)">Yair B</a>
           </div>
         </li>
         <li class="nav-item dropdown">
@@ -108,14 +108,14 @@
             <label for="inputModel" class="col-sm-2 col-form-label col-form-label-sm d-none d-sm-block">Model</label>
             <div class="col-sm-10 col-xs-12">
               <input type="text" class="form-control form-control-sm" id="inputModel" placeholder="Model Number"
-                onInput="updateTextarea(this)" onkeyup="switchCase(this)">
+                onInput="updateTextarea(this)" onKeyUp="switchCase(this)">
             </div>
           </div>
           <div class="form-group row">
             <label for="inputSerial" class="col-sm-2 col-form-label col-form-label-sm d-none d-sm-block">Serial</label>
             <div class="col-sm-10 col-xs-12">
               <input type="text" class="form-control form-control-sm" id="inputSerial" placeholder="Serial Number"
-                onInput="updateTextarea(this)" onkeyup="switchCase(this)">
+                onInput="updateTextarea(this)" onKeyUp="switchCase(this)">
             </div>
           </div>
           <div class="form-group row">
@@ -172,7 +172,7 @@
             <label for="inputError" class="col-sm-2 col-form-label col-form-label-sm d-none d-sm-block">Error</label>
             <div class="col-sm-10 col-xs-12">
               <input type="text" class="form-control form-control-sm" id="inputError"
-                placeholder="Exact error if possible" onInp1ut="updateTextarea(this)">
+                placeholder="Exact error if possible" onInput="updateTextarea(this)">
             </div>
           </div>
           <div class="form-group row">
@@ -329,10 +329,10 @@
       </div>
     </form>
   </main>
-  <!-- .txt and .ts extension used to overcome system limitations -->
+  <!-- .txt and .jsx extension used to workaround system limitations -->
   <script src="js/jquery-3.3.1.slim.min.txt"></script>
   <script src="js/bootstrap.min.txt"></script>
-  <script src="js/scripts.ts"></script>
+  <script src="js/scripts.jsx"></script>
 </body>
 
 </html>
