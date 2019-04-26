@@ -1,70 +1,63 @@
-    body,
-    html,
-    main,
-    form,
-    #mainrow {
-      height: 100%;
-      font-size: 0.9em;
-    }
+body, html, main, form, #mainrow {
+  height: 100%;
+  font-size: 0.9em;
+}
 
-    body {
-      overflow-y: hidden;
-    }
+body {
+  overflow-y: hidden;
+}
 
-    main {
-      padding: 0px;
-      padding-top: 5em;
-    }
+main {
+  padding: 0px;
+  padding-top: 5em;
+}
 
-    #textarea {
-      padding: 0px;
-      margin: 0px;      
-    }
+.form-control-sm {
+  background-color: #FFFFFD;
+}
 
-    #workarea {
-      /* height: 65%; */
-      margin: 0px;
-      padding: 0px;
-      overflow-y: hidden;
-    }
+#textarea {
+  padding: 0px;
+  margin: 0px;
+}
 
-    .form-control,
-    .form-group,
-    .form-group row {
-      padding: 1px;
-      margin: 0px;
-    }
+#workarea {
+  /* height: 65%; */
+  margin: 0px;
+  padding: 0px;
+  overflow-y: hidden;
+}
 
-    /* Too many items will not fit on the screen, reduced padding to make them fit */
-    .dropdown-item {
-      padding-top: 0px;
-    }
+.form-control, .form-group, .form-group row {
+  padding: 1px;
+  margin: 0px;
+}
 
-    #mainText {
-      font-family: "Consolas", monospace;
-      background-color: #EFF;
-    }
+/* Too many items will not fit on the screen, reduced padding to make them fit */
 
-    .navbar-light,
-    .navbar-light a,
-    navbar-brand {
-      background-color: #FFF;
-      color: #A90329 !important;
-    }
+.dropdown-item {
+  padding-top: 0px;
+}
 
-    @media (max-width: 575.98px) {
+#mainText {
+  font-family: "Consolas", monospace;
+  background-color: #EFF;
+}
 
-      #workarea {
-        height: 70%;
-        overflow-y: auto;
-      }
+.navbar-light, .navbar-light a, navbar-brand {
+  background-color: #FFF;
+  color: #A90329 !important;
+}
 
-      #textarea {
-        height: 30%;
-      }
-
-      #divWhere1,
-      #divWhere2 {
-        width: 50%;
-      }
-    }
+@media (max-width: 575.98px) {
+  #workarea {
+    height: 70%;
+    overflow-y: auto;
+  }
+  #textarea {
+    height: 30%;
+  }
+  #divWhere1, #divWhere2 {
+    width: 50%;
+  }
+}
