@@ -1,3 +1,8 @@
+Dahua tool v.1.0
+* Added sources field
+* Added validation to source field
+* Fixed issue with return carriages on several fields
+
 Dahua tool v.0.9
 * Cleaned scripts and templates
 * Separated code in files
