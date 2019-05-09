@@ -70,19 +70,19 @@ function updateTextarea(element) {
         // if its empty or na and optional
         if ((formHash[i][2] == "" || formHash[i][2] == "na") && !formHash[i][1]) {
             str += "";
-        // special case for the "happens where" fields
+            // special case for the "happens where" fields
         } else if ((i == "selectWhere" || i == "selectWhere2") && formHash["selectWhere2"][2] != "na") {
             if (i == "selectWhere2") {
                 ;
             } else {
                 str += formHash[i][0] + ": " + formHash[i][2] + ", " + formHash["selectWhere2"][2] + "\n";
             }
-        // Additional return carriages after the Distributor field
+            // Additional return carriages after the Distributor field
         } else if (i == "inputDistributor" && formHash["inputFirmware"][2] == "") {
             str += formHash[i][0] + ": " + formHash[i][2] + "\n\n";
         } else if (i == "inputFirmware" && formHash["inputFirmware"][2] != "") {
             str += formHash[i][0] + ": " + formHash[i][2] + "\n\n";
-        // Additional return carriages for the troubleshoot field
+            // Additional return carriages for the troubleshoot field
         } else if (i == "inputTx") {
             str += formHash[i][0] + ": \n\n" + formHash[i][2] + "\n";
         } else if (i == "inputModel" || i == "inputSerial") {
@@ -126,7 +126,7 @@ function switchCase(obj) {
 
 // Password Reset
 function passwordReset() {
-    var templateText = JSON.parse(JSON.stringify(defaultHash));
+    var templateText = JSON.parse(JSON.stringify(formHash));
     templateText.inputProblem[0, 2] = "Password Reset";
     templateText.inputTx[0, 2] = "Date on the screen is <INSERT DATE HERE>.\nSent email with the passwords and asked to follow the instructions included.";
 
@@ -134,13 +134,16 @@ function passwordReset() {
         document.getElementById(k).value = templateText[k][2];
     }
 
+    templateText.inputSources[0, 2] = "https://dahuawiki.com/PasswordReset";
+
     updateTextarea(document.getElementById("inputProblem"));
     updateTextarea(document.getElementById("inputTx"));
+    updateTextarea(document.getElementById("inputSources"));
 }
 
 // Remote connection setup, thank you Miguel!
 function P2PSetup(interface) {
-    var templateText = JSON.parse(JSON.stringify(defaultHash));
+    var templateText = JSON.parse(JSON.stringify(formHash));
     templateText.inputProblem[0, 2] = "P2P connection setup";
     if (interface == "Blue") {
         templateText.inputTx[0, 2] = "On the Unit: Main Menu > Network (Setting) > P2P and enabled P2P. Click OK.\r" +
@@ -155,6 +158,7 @@ function P2PSetup(interface) {
             "Device Manager > Add > Camera > Wired Device > P2P.\r" +
             "Fill the information on Screen.\r" +
             "Click 'Start Live Preview'.\r";
+        templateText.inputSources[0, 2] = "https://dahuawiki.com/Troubleshoot/NVR/P2P_Troubleshoot";
     } else {
         templateText.inputTx[0, 2] = "On the unit: Main Menu > Network > P2P > Enable > Apply.\r" +
             "P2P Status: 'Offline'.\r" +
@@ -165,6 +169,34 @@ function P2PSetup(interface) {
             "Click on the Three lines on the top left.\r" +
             "Device Manager > Add > Camera > Wired Device > P2P.\r" +
             "Fill the information on screen. Click 'Start Live Preview'.\r";
+        templateText.inputSources[0, 2] = "https://dahuawiki.com/New_GUI/Instructions/Remote_Access_via_P2P";
+    }
+
+    for (var k in templateText) {
+        document.getElementById(k).value = templateText[k][2];
+    }
+
+    updateTextarea(document.getElementById("inputProblem"));
+    updateTextarea(document.getElementById("inputTx"));
+    updateTextarea(document.getElementById("inputSources"));
+}
+
+// Motion Setup
+function motionRecording(interface) {
+    var templateText = JSON.parse(JSON.stringify(formHash));
+    templateText.inputProblem[0, 2] = "Motion recording setup";
+    if (interface == "Blue") {
+        templateText.inputTx[0, 2] = "Main Menu > Event under Settings > Video Detect > Motion Detect > Enable.\r" +
+            "Enable Record Channel. Channel is the same as the camera channel.\r" +
+            "Main Menu > Storage > Schedule > Hit Motion/MD > Hit All > Draw motion lines over the timeline.\r" +
+            "Main Menu > Storage > Record > Cameras are on Auto for the Main Stream\r";
+        templateText.inputSources[0, 2] = "http://www.dahuawiki.com/NVR/Recording_Setup/Motion_Record_Troubleshoot";
+    } else {
+        templateText.inputTx[0, 2] = "Main Menu > Management > Camera > Video Detect > Motion Detect > Enable MD\r" +
+            "Enable Record Channel. Channel is the same as the camera channel.\r" +
+            "Main Menu > Management > Storage > Schedule > Hit Motion/MD > Hit All > Draw motion lines over the timeline.\r" +
+            "Main Menu > Storage > Record > Cameras are on Auto for the Main Stream";
+        templateText.inputSources[0, 2] = "https://dahuawiki.com/New_GUI/Instructions/Motion_Record";
     }
 
     for (var k in templateText) {
@@ -175,20 +207,30 @@ function P2PSetup(interface) {
     updateTextarea(document.getElementById("inputTx"));
 }
 
-// Motion Setup
-function motionRecording(interface) {
-    var templateText = JSON.parse(JSON.stringify(defaultHash));
-    templateText.inputProblem[0, 2] = "Motion recording setup";
+// Email notifications setup
+function emailNotifications(interface) {
+    var templateText = JSON.parse(JSON.stringify(formHash));
+    templateText.inputProblem[0, 2] = "Email Notifications Setup";
+    let commonText = "Server smtp.gmail.com, port 465.\r" +
+        "Username is the full gmail address, password for gmail account.\r" +
+        "Sender and receiver, emails where you want to send/receive notifications from/to.\r" +
+        "Attachment enabled.\r" +
+        "Save then hit Test.\r";
+
     if (interface == "Blue") {
-        templateText.inputTx[0, 2] = "Main Menu > Event under Settings > Video Detect > Motion Detect > Enable.\r" +
-            "Enable Record Channel. Channel is the same as the camera channel.\r" +
-            "Main Menu > Storage > Schedule > Hit Motion/MD > Hit All > Draw motion lines over the timeline.\r" +
-            "Main Menu > Storage > Record > Cameras are on Auto for the Main Stream\r";
+        templateText.inputTx[0, 2] = "Main Menu > Network > Email > Enable.\r" + commonText;
+        templateText.inputSources[0, 2] = "https://dahuawiki.com/Email/Email_Notifications_Setup";
+    } else if (interface == "Black") {
+        templateText.inputTx[0, 2] = "Management > Network > Email > Enable.\r" + commonText;
+        templateText.inputSources[0, 2] = "https://dahuawiki.com/Email/Email_Notifications_Setup";
+    } else if (interface == "Web") {
+        templateText.inputTx[0, 2] = "Setup > Network > Email > Enable.\r" + commonText;
+        templateText.inputSources[0, 2] = "https://dahuawiki.com/Email/Email_Notifications_Setup_GMail";
+
     } else {
-        templateText.inputTx[0, 2] = "Main Menu > Management > Camera > Video Detect > Motion Detect > Enable MD\r" +
-            "Enable Record Channel. Channel is the same as the camera channel.\r" +
-            "Main Menu > Management > Storage > Schedule > Hit Motion/MD > Hit All > Draw motion lines over the timeline.\r" +
-            "Main Menu > Storage > Record > Cameras are on Auto for the Main Stream";
+        templateText.inputTx[0, 2] = "+ > Device Config > Select Recorder > Network > Email > Enable.\r" + commonText;
+        templateText.inputSources[0, 2] = "https://dahuawiki.com/Email/Email_Notifications_Setup_GMail";
+        templateText.inputSoftware[0, 2] = "SmartPSS"
     }
 
     for (var k in templateText) {
@@ -196,7 +238,7 @@ function motionRecording(interface) {
     }
 
     updateTextarea(document.getElementById("inputProblem"));
-    updateTextarea(document.getElementById("inputTx"));
+    updateTextarea(document.getElementById("inputTx"));    
 }
 
 window.onload = function () {
@@ -213,7 +255,7 @@ function doc_keyUp(e) {
         });
     }
     // alt+g
-    if (e.altKey && e.keyCode == 71) {        
+    if (e.altKey && e.keyCode == 71) {
         copyTextArea();
     }
 }

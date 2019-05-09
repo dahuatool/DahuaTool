@@ -1,4 +1,10 @@
 <!--
+  Dahua tool v.1.2
+  - Now templates don't overwrite fields they don't have to
+  - Added Email notifications setup template
+  Dahua tool v.1.1
+  - Fixed scrollbar not showing on higher zooms
+  - Added links for templates on the sources template
   Dahua tool v.1.0
   - Added sources field
   - Added validation to source field
@@ -88,6 +94,7 @@
           <div class="dropdown-menu" aria-labelledby="dropdown01" id="dropdownNameList">
             <a class="dropdown-item" href="#" data-toggle="modal" data-target="#blackOrBlueModal">P2P setup</a>
             <a class="dropdown-item" href="#" data-toggle="modal" data-target="#blackOrBlueModal1">Motion Recording</a>
+            <a class="dropdown-item" href="#" data-toggle="modal" data-target="#emailModal">Email Notification</a>
             <a class="dropdown-item" href="#" onClick="passwordReset()">Password Reset</a>
           </div>
         </li>
@@ -137,8 +144,7 @@
             </div>
           </div>
           <div class="form-group row">
-            <label for="selectFirst" class="col-sm-2 col-form-label col-form-label-sm d-none d-sm-block">First time
-              happenning?</label>
+            <label for="selectFirst" class="col-sm-2 col-form-label col-form-label-sm d-none d-sm-block">First time?</label>
             <div class="col-sm-10 col-xs-12">
               <select class="form-control form-control-sm mr-sm-2" id="selectFirst" placeholder="First time happening?"
                 onChange="updateTextarea(this)">
@@ -212,11 +218,11 @@
             </div>
           </div>
           <div class="form-group row">
-            <label for="selectCompatible" class="col-sm-6 col-form-label col-form-label-sm d-none d-sm-block">Are units
+            <label for="selectCompatible" class="col-sm-2 col-form-label col-form-label-sm d-none d-sm-block">Units
               compatible?</label>
-            <div class="col-sm-6">
+            <div class="col-sm-10 col-xs-12">
               <select class="form-control form-control-sm mr-sm-2" id="selectCompatible"
-                placeholder="Are the units compatible?" onInput="updateTextarea(this)">
+                onInput="updateTextarea(this)">
                 <option value="" disabled selected>Are the units compatible?</option>
                 <option value="Yes">Yes</a>
                 <option value="No">No</a>
@@ -228,22 +234,10 @@
             <label for="inputSources"
               class="col-sm-2 col-form-label col-form-label-sm d-none d-sm-block">Sources</label>
             <div class="col-sm-10">
-              <input type="text" class="form-control form-control-sm" id="inputSources" placeholder="Sources"
-                onInput="updateTextarea(this)">
-            </div>
-            <div class="invalid-feedback">
-              Please fill in your source!
+              <textarea class="form-control form-control-sm" id="inputSources" rows="2" placeholder="Sources"
+                onInput="updateTextarea(this)"></textarea>
             </div>
           </div>
-          <!-- <div class="form-group row">
-            <label for="inputSettings"
-              class="col-sm-2 col-form-label col-form-label-sm d-none d-sm-block">Settings</label>
-            <div class="col-sm-10">
-              <input type="text" class="form-control form-control-sm" id="inputSettings" placeholder="Settings verified"
-                onInput="updateTextarea(this)">
-            </div>
-          </div> -->
-
           <div class="form-group row">
             <label for="inputTx"
               class="col-sm-2 col-form-label col-form-label-sm d-none d-sm-block">Troubleshoot</label>
@@ -306,6 +300,33 @@
                   onClick="motionRecording('Black')">Black</button>
                 <button type="button" class="btn btn-primary" data-dismiss="modal"
                   onClick="motionRecording('Blue')">Blue</button>
+              </div>
+              <div class="modal-footer">
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal fade" id="emailModal" tabindex="-1" role="dialog" aria-labelledby="emailModal"
+          aria-hidden="true">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="emailModal">Choose the interface:</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal"
+                  onClick="emailNotifications('Black')">Black</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal"
+                  onClick="emailNotifications('Blue')">Blue</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal"
+                  onClick="emailNotifications('Web')">Web
+                  Interface</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal"
+                  onClick="emailNotifications('SmartPSS')">SmartPSS</button>
               </div>
               <div class="modal-footer">
               </div>

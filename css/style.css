@@ -22,10 +22,11 @@ main {
 }
 
 #workarea {
-  /* height: 65%; */
+  /* Height setting to workaround a computer */
+  height: 99%;
   margin: 0px;
   padding: 0px;
-  overflow-y: hidden;
+  overflow-y: auto;
 }
 
 .form-control, .form-group, .form-group row {
