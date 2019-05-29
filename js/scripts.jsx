@@ -48,6 +48,17 @@ var formHash = JSON.parse(JSON.stringify(defaultHash));
 var d = new Date();
 var currentDate = (d.getMonth() + 1) + "/" + d.getDate() + "/" + d.getFullYear();
 
+// checkVersion() Shows the latest features of the version on the first load of the app.
+// Created after noticing people were unaware of the features of the app
+function checkVersion() {
+    if (localStorage.checkVersion != "true") {
+        $(document).ready(function () {
+            $("#checkVersion").modal();
+        });        
+    }
+    localStorage.setItem("checkVersion", "true");
+}
+
 // setName() Stores the name of the user on the local storage and updates the dropdownmenu
 function setName(element) {
     localStorage.setItem("wizardName", element.textContent);
@@ -244,6 +255,7 @@ function emailNotifications(interface) {
 window.onload = function () {
     loadStorage();
     formReset();
+    checkVersion();
 }
 
 // Keyboard Shortcuts
