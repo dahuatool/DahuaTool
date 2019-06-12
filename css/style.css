@@ -22,7 +22,7 @@ main {
 }
 
 #workarea {
-  /* Height setting to workaround a computer */
+  /* Height setting as a workaround one particular PC in the workplace */
   height: 99%;
   margin: 0px;
   padding: 0px;
@@ -48,6 +48,18 @@ main {
 .navbar-light, .navbar-light a, navbar-brand {
   background-color: #FFF;
   color: #A90329 !important;
+}
+
+.btn-addproduct {
+  margin-left:3px;
+}
+
+.flex {
+  display: flex;
+}
+
+.uppercase {
+  text-transform: uppercase;
 }
 
 @media (max-width: 575.98px) {

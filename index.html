@@ -1,4 +1,7 @@
 <!--
+  Dahua tool v.1.4
+  - Multiple fields capability for model/serial/firmware added
+  - Fixed unable to add text at begining of fields
   Dahua tool v.1.3
   - Autocomplete for model # and distributor trial
   - Models from 
@@ -123,16 +126,20 @@
           </div>
           <div class="form-group row">
             <label for="inputModel" class="col-sm-2 col-form-label col-form-label-sm d-none d-sm-block">Model</label>
-            <div class="col-sm-10 col-xs-12">
-              <input list="deviceList" class="form-control form-control-sm" id="inputModel" placeholder="Model Number"
-                onInput="updateTextarea(this)" onKeyUp="switchCase(this)">
+            <div class="col-sm-10 col-xs-10 flex">
+              <input list="deviceList" class="form-control form-control-sm uppercase" id="inputModel" placeholder="Model Number"
+                onInput="updateTextarea(this)">
+              <button type="button" class="btn-sm btn-primary btn-addproduct" id="addNewFields"
+                onclick="addFields()">+</button>
+              <button type="button" class="btn-sm btn-primary btn-addproduct" id="removeField"
+              data-toggle="modal" data-target="#removeFieldModal">-</button>
             </div>
           </div>
           <div class="form-group row">
             <label for="inputSerial" class="col-sm-2 col-form-label col-form-label-sm d-none d-sm-block">Serial</label>
-            <div class="col-sm-10 col-xs-12">
-              <input type="text" class="form-control form-control-sm" id="inputSerial" placeholder="Serial Number"
-                onInput="updateTextarea(this)" onKeyUp="switchCase(this)">
+            <div class="col-sm-10 col-xs-12 flex">
+              <input type="text" class="form-control form-control-sm uppercase" id="inputSerial" placeholder="Serial Number"
+                onInput="updateTextarea(this)">
             </div>
           </div>
           <div class="form-group row">
@@ -144,11 +151,10 @@
             </div>
           </div>
           <div class="form-group row">
-            <label for="inputFirmware"
-              class="col-sm-2 col-form-label col-form-label-sm d-none d-sm-block">Firmware</label>
-            <div class="col-sm-10 col-xs-12">
+            <label for="inputFirmware" class="col-sm-2 col-form-label col-form-label-sm d-none d-sm-block">Firmware</label>
+            <div class="col-sm-10 col-xs-12 flex">
               <input type="text" class="form-control form-control-sm" id="inputFirmware" placeholder="Firmware"
-                onInput="updateTextarea(this)">
+                onInput="updateTextarea(this)" onKeyUp="switchCase(this)">
             </div>
           </div>
           <div class="form-group row">
@@ -255,7 +261,6 @@
                 onInput="updateTextarea(this)"></textarea>
             </div>
           </div>
-
           <div class="form-group row">
             <label for="inputMissing" class="col-sm-2 col-form-label col-form-label-sm d-none d-sm-block">Missing
               steps</label>
@@ -354,6 +359,25 @@
               <div class="modal-body">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
                 <button type="button" class="btn btn-primary" data-dismiss="modal" onClick="formReset()">Reset</button>
+              </div>
+              <div class="modal-footer">
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal fade" id="removeFieldModal" tabindex="-1" role="dialog" aria-labelledby="removeFieldModal"
+          aria-hidden="true">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="removeFieldModal">Do you want to remove the last field?</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" onClick="removeLastField()">Remove</button>
               </div>
               <div class="modal-footer">
               </div>
@@ -967,84 +991,129 @@
     <option value="XVR5108HS-ADT">
   </datalist>
   <datalist id="distributorList">
-    <option value="ADI">
+    <option value="Accu-Tech Corporation">
     <option value="ADT">
+    <option value="ALARMAX DISTRIBUTORS INC.">
+    <option value="Alarm Devices Supply of RI, Inc">
     <option value="Alarm Product Distributors / APD">
+    <option value="ALL CCTV supply, Inc">
     <option value="Altex">
-    <option value="Amazon(Non Authorized)">
-    <option value="Ameta International(Non Authorized)">
+    <option value="Amazon: Non Authorized">
     <option value="Ameta West">
     <option value="Anixter / Tri-ed">
     <option value="APA">
     <option value="Arlenco">
-    <option value="B&H Photo">
-    <option value="Bass Computers">
-    <option value="Brooklyn Supply">
-    <option value="CCTV.Net / STS Labs">
-    <option value="City Electric Supply">
-    <option value="Data">
-    <option value="Dealer">
-    <option value="Digital WatchGuard">
-    <option value="DSG Distributors">
-    <option value="EBay(Non Authorized)">
-    <option value="Esentia">
-    <option value="Gerrie Electric">
-    <option value="Global Surveillance Systems">
-    <option value="Graybar Canada">
-    <option value="LeaderTech Systems of Chicago Inc.">
-    <option value="Lirio">
-    <option value="Low Voltage Direct">
-    <option value="Other: Authorized (See Notes)">
-    <option value="Other: Non Authorized (See Notes)">
-    <option value="Professional Security Alliance">
-    <option value="Security Data Systems">
-    <option value="Security Equipment Supply, Inc / SES">
-    <option value="The Systems Depot">
-    <option value="Tyco">
-    <option value="United Digital Technologies">
-    <option value="VideoVision">
+    <option value="Accu-Tech Corporation">
+    <option value="ASAVING.COM">
     <option value="A1 Security Supply">
     <option value="Adorama">
     <option value="Alarm Services Group">
     <option value="Apple Store">
     <option value="Argos">
+    <option value="ADI / Omega">
+    <option value="Alarm Devices Supply of RI, Inc">
+    <option value="ALL CCTV Supply, Inc.">
+    <option value="B&H">
     <option value="Babies R us">
     <option value="Best Buy">
     <option value="BJ's">
     <option value="BrandsMart">
+    <option value="B&H Photo">
+    <option value="Bass Computers">
+    <option value="Brooklyn Supply">
+    <option value="Brooklyn Supply/MKS Sales">
+    <option value="CCTV.Net / STS Labs">
+    <option value="City Electric Supply">
     <option value="Canada Computers">
     <option value="Canadian Tire">
     <option value="CISCO">
-    <option value="COSTCO">
-    <option value="Fry's Electronics">
+    <option value="COSTCO - Support By Lorex">
+    <option value="Canal Alarm Devices Inc">
+    <option value="Communications Supply Svc Assoc">
+    <option value="Communications Supply Corporate">
+    <option value="Custom Electronic Supply">
+    <option value="Crescent Electric Supply Company">
+    <option value="D. Viola Enterprises / ROC Supply">
+    <option value="Data">
+    <option value="Dealer">
+    <option value="Digital WatchGuard">
+    <option value="DSG Distributors">
+    <option value="D.W. Collins, Inc, DBA: AVX">
+    <option value="Deerfield Distributing Inc.">
+    <option value="DWG">
+    <option value="EBay: Non Authorized">
+    <option value="Esentia">
+    <option value="Electronic Supply Co.">
+    <option value="Electracom Supply Inc">
+    <option value="FLIR">
+    <option value="Fry’s Electronics">
     <option value="Future Shop">
+    <option value="FOCUS CAMERA">
+    <option value="GLD Group, Inc.">
+    <option value="Gerrie Electric">
+    <option value="Global Surveillance Systems">
+    <option value="Graybar Canada">
     <option value="Gift">
-    <option value="Harbour Freight">
+    <option value="Gescan, Div of Sonepar Canada, Inc.">
+    <option value="Graybar Electric Company Inc.">
     <option value="Home Depot">
     <option value="Home Hardware">
     <option value="Home Shopping Network">
+    <option value="Honeywell">
+    <option value="Harbour Freight">
+    <option value="ISTAGROUP Ltd.">
+    <option value="ITM Instruments Inc.">
+    <option value="JMG Security">
     <option value="Kmart">
-    <option value="Lorex Website">
+    <option value="LeaderTech Systems of Chicago Inc.">
+    <option value="Lirio">
+    <option value="Low Voltage Direct">
+    <option value="Lorex Website: Support by Lorex">
     <option value="Maplins">
     <option value="Micro Center">
     <option value="MicroTech">
+    <option value="Nedco">
+    <option value="Norfolk Wire - Richmond Inc">
     <option value="Office Depot">
     <option value="OnPoint Surveillance">
+    <option value="Other: Authorized (See Notes)">
+    <option value="Other: Non Authorized (See Notes)">
+    <option value="PSA Security Network">
     <option value="P.C. Richard & Son">
     <option value="Petra">
     <option value="PriceSmart">
+    <option value="Professional Security Alliance">
     <option value="Radio Shack">
     <option value="Sam's Club">
     <option value="Sears">
     <option value="Smarthome">
     <option value="Staples">
+    <option value="Security Data Supply, LLC">
+    <option value="Source PTI OpCo LLC">
+    <option value="Sektor Ltd">
+    <option value="ScanSource Inc">
+    <option value="Secure Vision">
+    <option value="Synergy Datacom Supply, Inc.">
+    <option value="State Electric Supply Company, Inc">
+    <option value="Staub Electronics Ltd">
+    <option value="System Distributors Inc">
+    <option value="Silmar Electronics Inc.">
+    <option value="Security Data Systems">
+    <option value="Security Equipment Supply, Inc / SES">
     <option value="Target">
     <option value="TigerDirect">
     <option value="Toys R us">
-    <option value="Vigilance and Security">
+    <option value="The Systems Depot">
+    <option value="Tyco">
+    <option value="United Digital Technologies">
+    <option value="Van Meter, Inc.">
+    <option value="VideoVision">
+    <option value="Vigilence and Security">
     <option value="Walmart">
     <option value="Woot.com">
-    <option value="JMG Security">
+    <option value="W.W. Grainger, Inc">
+    <option value="Watcher Products, Inc.">
+    <option value="Wesco">
     <option value="Honeywell (OEM)">
     <option value="Detech / Savvy tech (OEM)">
     <option value="DH Vision (OEM)">
