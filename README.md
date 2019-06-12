@@ -1,4 +1,14 @@
-
+  Dahua tool v.1.4
+  - Multiple fields capability for model/serial/firmware added
+  - Fixed unable to add text at beginning of fields
+  Dahua tool v.1.3
+  - Autocomplete for model # and distributor trial
+  - Models from 
+    * https://dahuawiki.com/cameras 
+    * https://dahuawiki.com/recorders 
+    * https://dahuawiki.com/kits 
+    * https://dahuawiki.com/Internal:ADT#DVRs
+  - Flir Models from Digimerge website
   Dahua tool v.1.2
   - Now templates don't overwrite fields they don't have to
   - Added Email notifications setup template
